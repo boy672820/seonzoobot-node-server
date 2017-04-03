@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	h1= title
+	p Welcome to #{title}
+
+	div.chatting-result
+
+	div.container
+		form.chatting-form
+			input#chatting-message( type="text" placeholder="Enter message" )
+			button( type="submit" ) Submit
