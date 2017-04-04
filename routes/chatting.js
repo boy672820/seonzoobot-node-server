@@ -21,7 +21,7 @@ router.post( '/send-message', function ( req, res ) {
 	var results = {
 			success: false,
 			error: false,
-			type: 'message'
+			type: 'message',
 			data: ''
 		},
 		csConfig = {

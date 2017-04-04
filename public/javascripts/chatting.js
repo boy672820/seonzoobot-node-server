@@ -16,19 +16,24 @@
 				data: serialize,
 
 				success: function ( res ) {
-					if ( res.success ) {
-						console.log( res.message );
-						$( '.chatting-result' ).html( '<p>' + res.message + '</p>' );
+					var $message = $( '<p>' );
+
+					if ( ! res.success ) {
+						if ( res.error )
+							console.log( 'error', '서버에 에러가 발생했습니다.' );
+						else
+							console.log( 'error', 'Not connection' );
+
+						return;
 					}
 
-					else {
-						if ( res.error ) {
-							console.log( 'error', '서버에 에러가 발생했습니다.' );
-						}
-						else {
-							console.log( 'error', 'Not connection' );
-						}
+					if ( res.type === 'youtube-api' ) {
+						$message.append( '<a href="https://www.youtube.com/watch?v=' + res.data.id + '" target="_blank">' + res.data.snippet.title + '</a>' );
+					} else {
+						$message.html( res.data );
 					}
+
+					$( '.chatting-result' ).html( $message );
 				},
 
 				error: function ( req, status, error ) {
