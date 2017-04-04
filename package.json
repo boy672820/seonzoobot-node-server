@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set DEBUG=seonzoobot-node-server:* & node ./bin/www"
+    "start": "set DEBUG=seonzoobot-node-server:* & node ./bin/www",
+	"debug": "node --debug ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
@@ -12,6 +13,7 @@
     "express": "~4.15.2",
     "morgan": "~1.8.1",
     "pug": "~2.0.0-beta11",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "youtube-api": "^2.0.8"
   }
 }

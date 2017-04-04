@@ -1,6 +1,15 @@
-var express = require('express');
-var net = require( 'net' );
-var router = express.Router();
+var express = require('express'),
+	Net = require( 'net' ),
+	Youtube = require( 'youtube-api' ),
+	router = express.Router();
+
+
+// Youtube-api authenticates
+Youtube.authenticate( {
+	type: 'key',
+	key: process.env.GOOGLE_API_KEY
+} );
+
 
 /* GET users listing. */
 router.get( '/', function( req, res ) {
@@ -9,12 +18,22 @@ router.get( '/', function( req, res ) {
 
 router.post( '/send-message', function ( req, res ) {
 	// Create socket connection & Write(Send message)
-	var result = { success: false, error: false, message: '' },
-		csConfig = { host: 'ec2-13-124-15-185.ap-northeast-2.compute.amazonaws.com', port: 15509, allowHalfOpen: true },
+	var results = {
+			success: false,
+			error: false,
+			type: 'message'
+			data: ''
+		},
+		csConfig = {
+			host: process.env.BOT_DNS,
+			port: process.env.BOT_PORT,
+			allowHalfOpen: true
+		},
+		guest = 'guest',
 		csbot = 'nancy',
-		csSocket = net.createConnection( csConfig, function () {
+		csSocket = Net.createConnection( csConfig, function () {
 			var message = req.body.message,
-				payload = 'guest' + '\x00' + csbot + '\x00' + message + '\x00';
+				payload = guest + '\x00' + csbot + '\x00' + message + '\x00';
 
 			csSocket.write( payload );
 		} );
@@ -23,20 +42,51 @@ router.post( '/send-message', function ( req, res ) {
 	csSocket.on( 'data', function ( data ) {
 		var message = data.toString();
 
-		result.success = true;
-		result.message = message;
+		results.success = true;
+		results.data = message;
 	} );
 
 	// Socket error
 	csSocket.on( 'error', function( error ) {
-		result.success = false;
-		result.error = true;
-		console.log( 'error from server: ' + error + ' ' + csSocket.address()[ 1 ] );
+		console.log( error + ' ' + csSocket.address()[ 1 ] );
+		console.log( process.env.BOT_DNS );
+
+		results.success = false;
+		results.error = true;
 	} );
 
 	// Socket end
 	csSocket.on( 'end', function () {
-		res.send( result );
+
+		switch ( results.data ) {
+			// Youtube trending
+			case 'YOUTUBE-TRENDING':
+				Youtube.videos.list(
+					{
+						part: 'snippet',
+						chart: 'mostPopular',
+						regionCode: 'KR',
+						maxResults: 1
+					},
+					function ( error, data ) {
+						if ( error ) {
+							console.log( 'error', error );
+							results.success = false;
+							results.error = true;
+						} else {
+							var item = data.items[ 0 ];
+							results.data = item;
+							results.type = 'youtube-api';
+						}
+
+						res.send( results );
+					}
+				);
+			break;
+
+			default:
+				res.send( results );
+		}
 	} );
 } );
 
