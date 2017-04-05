@@ -1,7 +1,7 @@
 var express = require('express'),
+	router = express.Router(),
 	Net = require( 'net' ),
-	Youtube = require( 'youtube-api' ),
-	router = express.Router();
+	Youtube = require( 'youtube-api' );
 
 
 // Youtube-api authenticates
@@ -11,24 +11,15 @@ Youtube.authenticate( {
 } );
 
 
-/* GET users listing. */
+/* GET chatting listing. */
 router.get( '/', function( req, res ) {
 	res.render( 'chatting', { title: 'Chatting' } );
 });
 
 router.post( '/send-message', function ( req, res ) {
 	// Create socket connection & Write(Send message)
-	var results = {
-			success: false,
-			error: false,
-			type: 'message',
-			data: ''
-		},
-		csConfig = {
-			host: process.env.BOT_DNS,
-			port: process.env.BOT_PORT,
-			allowHalfOpen: true
-		},
+	var results = { success: false, error: false, type: 'message', data: '' },
+		csConfig = { host: process.env.BOT_DNS, port: process.env.BOT_PORT, allowHalfOpen: true },
 		guest = 'guest',
 		csbot = 'nancy',
 		csSocket = Net.createConnection( csConfig, function () {
@@ -57,7 +48,6 @@ router.post( '/send-message', function ( req, res ) {
 
 	// Socket end
 	csSocket.on( 'end', function () {
-
 		switch ( results.data ) {
 			// Youtube trending
 			case 'YOUTUBE-TRENDING':
