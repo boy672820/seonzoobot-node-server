@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set DEBUG=seonzoobot-node-server:* & node ./server/bin/www",
-    "debug": "node --debug ./server/bin/www"
+    "start": "node ./server/bin/www",
+    "debug": "set DEBUG=seonzoobot-node-server:* & node --debug ./server/bin/www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
