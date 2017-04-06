@@ -48,15 +48,17 @@ router.post( '/send-message', function ( req, res ) {
 
 	// Socket end
 	csSocket.on( 'end', function () {
-		switch ( results.data ) {
+		switch ( results.data.split( ' ' )[ 0 ] ) {
 			// Youtube trending
 			case 'YOUTUBE-TRENDING':
+				var told_num = Number( results.data.split( '.' )[ 1 ] );
+
 				Youtube.videos.list(
 					{
 						part: 'snippet',
 						chart: 'mostPopular',
 						regionCode: 'KR',
-						maxResults: 1
+						maxResults: told_num
 					},
 					function ( error, data ) {
 						if ( error ) {
@@ -64,7 +66,7 @@ router.post( '/send-message', function ( req, res ) {
 							results.success = false;
 							results.error = true;
 						} else {
-							var item = data.items[ 0 ];
+							var item = data.items[ told_num - 1 ];
 							results.data = item;
 							results.type = 'youtube-api';
 						}
