@@ -28,12 +28,19 @@ bot.on( 'message', function ( payload, reply ) {
 	var text = payload.message.text;
 
 	bot.getProfile( payload.sender.id, function ( error, profile ) {
-		if ( error ) throw error;
+		if ( error ) {
+			console.log( 1 );
+			console.log( error );
+			//throw error;
+		}
 
 		// Messenger-bot reply
 		var botReply = function ( message ) {
 			reply( { text: message }, function ( error ) {
-				if ( error ) throw error;
+				if ( error ) {
+					console.log( 2 );
+					console.log( error );
+				}
 			} );
 		};
 
