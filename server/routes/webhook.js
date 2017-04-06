@@ -99,7 +99,7 @@ bot.on( 'message', function ( payload, reply ) {
 				break;
 
 				default:
-					botReply( results );
+					botReply( results.data );
 			}
 		} );
 	} );
