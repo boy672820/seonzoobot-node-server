@@ -37,7 +37,7 @@ bot.on( 'message', function ( payload, reply ) {
 
 		// Messenger-bot reply
 		var botReply = function ( message ) {
-			reply( { text: message }, function ( error ) {
+			reply( message, function ( error ) {
 				if ( error ) {
 					console.log( 2 );
 					console.log( error );
@@ -124,7 +124,7 @@ bot.on( 'message', function ( payload, reply ) {
 				break;
 
 				default:
-					botReply( results.data );
+					botReply( { text: results.data } );
 			}
 		} );
 	} );
