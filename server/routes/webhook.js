@@ -31,10 +31,9 @@ bot.on( 'message', function ( payload, reply ) {
 		if ( error ) throw error;
 
 		// Messenger-bot reply
-		var botReply = function ( text ) {
-			reply( { text: text }, function ( error ) {
+		var botReply = function ( message ) {
+			reply( { text: message }, function ( error ) {
 				if ( error ) throw error;
-					console.log( 'Echoed back to ' + profile.first_name + ' ' + profile.last_name + ': ' + text );
 			} );
 		};
 
@@ -44,9 +43,7 @@ bot.on( 'message', function ( payload, reply ) {
 			guest = 'guest',
 			csbot = 'nancy',
 			csSocket = Net.createConnection( csConfig, function () {
-				var message = req.body.message,
-					payload = guest + '\x00' + csbot + '\x00' + message + '\x00';
-
+				var payload = guest + '\x00' + csbot + '\x00' + text + '\x00';
 				csSocket.write( payload );
 			} );
 
