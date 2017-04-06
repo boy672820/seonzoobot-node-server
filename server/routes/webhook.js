@@ -30,8 +30,7 @@ bot.on( 'message', function ( payload, reply ) {
 
 	bot.getProfile( sender_id, function ( error, profile ) {
 		if ( error ) {
-			console.log( 1 );
-			console.log( error );
+			console.log( "getProfile", error );
 			//throw error;
 		}
 
@@ -39,8 +38,8 @@ bot.on( 'message', function ( payload, reply ) {
 		var botReply = function ( message ) {
 			reply( message, function ( error ) {
 				if ( error ) {
-					console.log( 2 );
-					console.log( error );
+					console.log( "sendMessage", error );
+					//throw error;
 				}
 			} );
 		};
@@ -96,27 +95,31 @@ bot.on( 'message', function ( payload, reply ) {
 								results.type = 'youtube-api';
 							}
 
-							var youtubeData = results.data,
-								sendMessage = {
-									attachment: {
-										type: 'template',
-										payload: {
-											template_type: 'generic',
-											elements: [ {
-												title: youtubeData.snippet.title,
-												subtitle: youtubeData.snippet.description,
-												image_url: youtubeData.snippet.thumbnails.default.url,
-												button: [ {
-													type: 'web_url',
-													url: 'https://www.youtube.com/watch?v=' + youtubeData.id,
-													title: '유튜브 링크로 이동'
-												} ]
-											} ]
+							var youtube = results.data,
+								message = {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": youtube.snippet.title,
+													"image_url": youtube.snippet.thumbnails.default.url,
+													"subtitle": youtube.snippet.description,
+													"buttons": [
+														{
+															"type": "web_url",
+															"url": "https://www.youtube.com/watch?v=" + youtube.id,
+															"title": "유튜브 링크로 이동"
+														}
+													]
+												}
+											]
 										}
 									}
 								};
 
-							botReply( sendMessage );
+							botReply( message );
 						}
 					);
 				break;
