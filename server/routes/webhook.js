@@ -77,7 +77,7 @@ bot.on( 'message', function ( payload, reply ) {
 				// Youtube trending
 				case 'YOUTUBE-TRENDING':
 					var told_num = Number( results.data.split( '.' )[ 1 ] );
-					console.log( told_num );
+					console.log( results.data );
 
 					Youtube.videos.list(
 						{
