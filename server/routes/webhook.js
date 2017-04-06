@@ -104,7 +104,7 @@ bot.on( 'message', function ( payload, reply ) {
 											"elements": [
 												{
 													"title": youtube.snippet.title,
-													"image_url": youtube.snippet.thumbnails.default.url,
+													"image_url": youtube.snippet.thumbnails.medium.url,
 													"subtitle": youtube.snippet.description,
 													"buttons": [
 														{
