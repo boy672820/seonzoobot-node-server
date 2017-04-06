@@ -96,6 +96,8 @@ bot.on( 'message', function ( payload, reply ) {
 								results.type = 'youtube-api';
 							}
 
+							console.log( results.data );
+
 							var youtubeData = results.data,
 								sendMessage = {
 									attachment: {
