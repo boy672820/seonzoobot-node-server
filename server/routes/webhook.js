@@ -98,27 +98,28 @@ bot.on( 'message', function ( payload, reply ) {
 
 							console.log( results.data );
 
-							var youtubeData = results.data,
-								sendMessage = {
-									attachment: {
-										type: 'template',
-										payload: {
-											template_type: 'generic',
-											elements: [ {
-												title: youtubeData.snippet.title,
-												subtitle: youtubeData.snippet.description,
-												image_url: youtubeData.snippet.thumbnails.default.url,
-												button: [ {
-													type: 'web_url',
-													url: 'https://www.youtube.com/watch?v=' + youtubeData.id,
-													title: '유튜브 링크로 이동'
-												} ]
-											} ]
-										}
-									}
-								};
-
-							botReply( sendMessage );
+							// var youtubeData = results.data,
+							// 	sendMessage = {
+							// 		attachment: {
+							// 			type: 'template',
+							// 			payload: {
+							// 				template_type: 'generic',
+							// 				elements: [ {
+							// 					title: youtubeData.snippet.title,
+							// 					subtitle: youtubeData.snippet.description,
+							// 					image_url: youtubeData.snippet.thumbnails.default.url,
+							// 					button: [ {
+							// 						type: 'web_url',
+							// 						url: 'https://www.youtube.com/watch?v=' + youtubeData.id,
+							// 						title: '유튜브 링크로 이동'
+							// 					} ]
+							// 				} ]
+							// 			}
+							// 		}
+							// 	};
+							//
+							// botReply( sendMessage );
+							botReply( { text: 'https://www.youtube.com/watch?v=' + results.data.id } );
 						}
 					);
 				break;
