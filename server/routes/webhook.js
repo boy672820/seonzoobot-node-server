@@ -25,22 +25,29 @@ bot.on( 'error', function ( error ) {
 
 /** Messenger-bot on message */
 bot.on( 'message', function ( payload, reply ) {
-	var text = payload.message.text;
+	var text = payload.message.text,
+		sender_id = payload.sender.id;
 
-	bot.getProfile( payload.sender.id, function ( error, profile ) {
-		if ( error ) throw error;
+	bot.getProfile( sender_id, function ( error, profile ) {
+		if ( error ) {
+			console.log( "getProfile", error );
+			//throw error;
+		}
 
 		// Messenger-bot reply
 		var botReply = function ( message ) {
-			reply( { text: message }, function ( error ) {
-				if ( error ) throw error;
+			reply( message, function ( error ) {
+				if ( error ) {
+					console.log( "sendMessage", error );
+					//throw error;
+				}
 			} );
 		};
 
 		// Create socket connection & Write(Send message)
 		var results = { success: false, error: false, type: 'message', data: '' },
 			csConfig = { host: process.env.BOT_DNS, port: process.env.BOT_PORT, allowHalfOpen: true },
-			guest = 'guest',
+			guest = sender_id,
 			csbot = 'nancy',
 			csSocket = Net.createConnection( csConfig, function () {
 				var payload = guest + '\x00' + csbot + '\x00' + text + '\x00';
@@ -65,15 +72,17 @@ bot.on( 'message', function ( payload, reply ) {
 
 		// Socket end
 		csSocket.on( 'end', function () {
-			switch ( results.data ) {
+			switch ( results.data.split( ' ' )[ 0 ] ) {
 				// Youtube trending
 				case 'YOUTUBE-TRENDING':
+					var told_num = Number( results.data.split( '.' )[ 1 ] );
+
 					Youtube.videos.list(
 						{
 							part: 'snippet',
 							chart: 'mostPopular',
 							regionCode: 'KR',
-							maxResults: 1
+							maxResults: told_num
 						},
 						function ( error, data ) {
 							if ( error ) {
@@ -81,18 +90,42 @@ bot.on( 'message', function ( payload, reply ) {
 								results.success = false;
 								results.error = true;
 							} else {
-								var item = data.items[ 0 ];
+								var item = data.items[ told_num - 1 ];
 								results.data = item;
 								results.type = 'youtube-api';
 							}
 
-							botReply( 'https://www.youtube.com/watch?v=' + results.data.id );
+							var youtube = results.data,
+								message = {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": youtube.snippet.title,
+													"image_url": youtube.snippet.thumbnails.medium.url,
+													"subtitle": youtube.snippet.description,
+													"buttons": [
+														{
+															"type": "web_url",
+															"url": "https://www.youtube.com/watch?v=" + youtube.id,
+															"title": "유튜브 링크로 이동"
+														}
+													]
+												}
+											]
+										}
+									}
+								};
+
+							botReply( message );
 						}
 					);
 				break;
 
 				default:
-					botReply( results );
+					botReply( { text: results.data } );
 			}
 		} );
 	} );

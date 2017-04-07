@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
 	"name": "seonzoobot-node-server",
 	"version": "0.0.0",
@@ -24,3 +25,31 @@
 	},
 	"devDependencies": {}
 }
+=======
+{
+	"name": "seonzoobot-node-server",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"start": "node ./server/bin/www"
+	},
+	"keywords": [
+		"seonzoobot",
+		"heroku"
+	],
+	"author": "seonzoo",
+
+	"dependencies": {
+		"body-parser": "~1.17.1",
+		"cookie-parser": "~1.4.3",
+		"debug": "~2.6.3",
+		"express": "~4.15.2",
+		"morgan": "~1.8.1",
+		"pug": "~2.0.0-beta11",
+		"serve-favicon": "~2.4.2",
+		"youtube-api": "^2.0.8",
+		"messenger-bot": "~2.4.0"
+	},
+	"devDependencies": {}
+}
+>>>>>>> heroku
