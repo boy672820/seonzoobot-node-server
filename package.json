@@ -8,8 +8,7 @@
 		"auto-start": "nodemon --exec \"npm start\" --ignore public/js"
 	},
 	"keywords": [
-		"seonzoobot",
-		"heroku"
+		"seonzoobot"
 	],
 	"author": "seonzoo",
 
