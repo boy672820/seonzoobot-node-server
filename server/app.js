@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 'use strict';
 
 import express from 'express';
@@ -7,9 +9,7 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
-import index from './routes/index';
-import chatting from './routes/chatting';
-import webhook from './routes/webhook';
+import routes from './routes/index';
 
 const app = express();
 
@@ -18,16 +18,14 @@ app.set('views', path.join(__dirname, '/../views'));
 app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/../public')));
 
-app.use( '/', index );
-app.use( '/chatting', chatting );
-app.use( '/webhook', webhook );
+app.use( '/', routes );
 
 // catch 404 and forward to error handler
 app.use( ( req, res, next ) => {

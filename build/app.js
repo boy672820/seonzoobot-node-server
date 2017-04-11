@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 'use strict';
 
 var _express = require('express');
@@ -28,14 +30,6 @@ var _index = require('./routes/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _chatting = require('./routes/chatting');
-
-var _chatting2 = _interopRequireDefault(_chatting);
-
-var _webhook = require('./routes/webhook');
-
-var _webhook2 = _interopRequireDefault(_webhook);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
@@ -45,7 +39,7 @@ app.set('views', _path2.default.join(__dirname, '/../views'));
 app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use((0, _morgan2.default)('dev'));
 app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
@@ -53,8 +47,6 @@ app.use((0, _cookieParser2.default)());
 app.use(_express2.default.static(_path2.default.join(__dirname, '/../public')));
 
 app.use('/', _index2.default);
-app.use('/chatting', _chatting2.default);
-app.use('/webhook', _webhook2.default);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

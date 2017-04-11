@@ -5,8 +5,9 @@
   "scripts": {
     "lint": "eslint ./server/app.js",
     "build": "babel server --out-dir build",
-    "start": "set DEBUG=seonzoobot-node-server:* & node ./build/bin/www",
-	"build-start": "npm run build && npm start"
+    "start": "set DEBUG=seonzoobot-node-server:* & node ./bin/www",
+	"build-start": "npm run build && npm start",
+	"debug": "node --debug ./bin/www"
   },
   "keywords": [
     "seonzoobot"

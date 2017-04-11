@@ -6,13 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _express = require('express');
 
-exports.default = function (_ref) {
-	var config = _ref.config,
-	    db = _ref.db;
+var router = (0, _express.Router)(); /* jshint esversion: 6 */
 
-	var routes = (0, _express.Router)();
 
-	// add middleware here
+router.param('id', function (req, res, next, id) {
+	req.data = 'data: ' + id;
+	next();
+});
+router.get('/:id', function (req, res, next) {
+	res.send(req.data);
+});
 
-	return routes;
-};
+exports.default = router;

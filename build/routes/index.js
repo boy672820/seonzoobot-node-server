@@ -1,17 +1,27 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _express = require('express');
 
-var _express2 = _interopRequireDefault(_express);
+var _chatting = require('./chatting');
+
+var _chatting2 = _interopRequireDefault(_chatting);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var router = _express2.default.Router();
+/* jshint esversion: 6 */
+var router = (0, _express.Router)();
 
 /* GET home page. */
-/* jshint esversion: 6 */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-module.exports = router;
+/* Mount routes */
+router.use('/chatting', _chatting2.default);
+//router.use( '/webhook' );
+
+exports.default = router;
