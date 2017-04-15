@@ -11,6 +11,6 @@ router.get( '/', ( req, res, next ) => {
 
 /* Mount routes */
 router.use( '/chatting', chatting );
-//router.use( '/webhook' );
+router.use( '/webhook' );
 
 export default router;
