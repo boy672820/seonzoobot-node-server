@@ -1,2 +1,4 @@
 node_modules
 npm-debug.log
+/certificates/chatscript-hosts.json
+/certificates/google-apis.json

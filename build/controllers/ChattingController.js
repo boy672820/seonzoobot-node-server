@@ -11,9 +11,9 @@ var _net = require('net');
 
 var _net2 = _interopRequireDefault(_net);
 
-var _youtubeApi = require('youtube-api');
+var _YoutubeApiConfiguration = require('../libraries/YoutubeApiConfiguration');
 
-var _youtubeApi2 = _interopRequireDefault(_youtubeApi);
+var _YoutubeApiConfiguration2 = _interopRequireDefault(_YoutubeApiConfiguration);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,19 +45,13 @@ var ChattingController = function () {
 	}, {
 		key: 'sendMessage',
 		value: function sendMessage(req, res) {
-			// Youtube-api authenticates
-			_youtubeApi2.default.authenticate({
-				type: 'key',
-				key: process.env.GOOGLE_API_KEY
-			});
-
 			// Create socket connection & Write(Send message)
 			var results = { success: false, error: false, type: 'message', data: '' },
+			    csConfig = { host: process.env.BOT_DNS, port: process.env.BOT_PORT, allowHalfOpen: true },
 			    guest = 'guest',
 			    csbot = 'nancy';
 
-			var csConfig = { host: process.env.BOT_DNS, port: process.env.BOT_PORT, allowHalfOpen: true },
-			    csSocket = _net2.default.createConnection(csConfig, function () {
+			var csSocket = _net2.default.createConnection(csConfig, function () {
 				var payload = guest + '\0' + csbot + '\0' + req.body.message + '\0';
 				csSocket.write(payload);
 			});
@@ -73,7 +67,6 @@ var ChattingController = function () {
 			// Socket error
 			csSocket.on('error', function (error) {
 				console.log(error + ' ' + csSocket.address()[1]);
-				console.log(process.env.BOT_DNS);
 
 				results.success = false;
 				results.error = true;
@@ -86,7 +79,9 @@ var ChattingController = function () {
 					case 'YOUTUBE-TRENDING':
 						var told_num = Number(results.data.split('.')[1]);
 
-						_youtubeApi2.default.videos.list({
+						var youtube = new _YoutubeApiConfiguration2.default();
+
+						youtube.videos.list({
 							part: 'snippet',
 							chart: 'mostPopular',
 							regionCode: 'KR',

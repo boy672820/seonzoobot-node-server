@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 import Net from 'net';
-import Youtube from 'youtube-api';
+import YoutubeApiConfiguration from '../libraries/YoutubeApiConfiguration';
 
 
 /**
@@ -19,19 +19,13 @@ export default class ChattingController {
 	 * POST - Sending created messages
 	 */
 	sendMessage( req, res ) {
-		// Youtube-api authenticates
-		Youtube.authenticate( {
-			type: 'key',
-			key: process.env.GOOGLE_API_KEY
-		} );
-
 		// Create socket connection & Write(Send message)
 		let results = { success: false, error: false, type: 'message', data: '' },
+			csConfig = { host: process.env.BOT_DNS, port: process.env.BOT_PORT, allowHalfOpen: true },
 			guest = 'guest',
 			csbot = 'nancy';
 
-		const csConfig = { host: process.env.BOT_DNS, port: process.env.BOT_PORT, allowHalfOpen: true },
-			csSocket = Net.createConnection( csConfig, () => {
+		const csSocket = Net.createConnection( csConfig, () => {
 				let payload = `${guest}\x00${csbot}\x00${req.body.message}\x00`;
 				csSocket.write( payload );
 			} );
@@ -47,7 +41,6 @@ export default class ChattingController {
 		// Socket error
 		csSocket.on( 'error',  error => {
 			console.log( `${error} ${csSocket.address()[ 1 ]}` );
-			console.log( process.env.BOT_DNS );
 
 			results.success = false;
 			results.error = true;
@@ -60,7 +53,9 @@ export default class ChattingController {
 				case 'YOUTUBE-TRENDING':
 					let told_num = Number( results.data.split( '.' )[ 1 ] );
 
-					Youtube.videos.list(
+					const youtube = new YoutubeApiConfiguration();
+
+					youtube.videos.list(
 						{
 							part: 'snippet',
 							chart: 'mostPopular',

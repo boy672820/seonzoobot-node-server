@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import ChattingController from '../controllers/ChattingController';
 
+
 const router = Router();
 const chattingController = new ChattingController();
 
