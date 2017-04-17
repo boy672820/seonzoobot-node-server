@@ -1,6 +1,7 @@
 /* jshint esversion: 6 */
 import { Router } from 'express';
 import chatting from './chatting';
+import webhook from './webhook';
 
 const router = Router();
 
@@ -11,6 +12,6 @@ router.get( '/', ( req, res, next ) => {
 
 /* Mount routes */
 router.use( '/chatting', chatting );
-router.use( '/webhook' );
+router.use( '/webhook', webhook );
 
 export default router;
