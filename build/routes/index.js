@@ -22,6 +22,6 @@ router.get('/', function (req, res, next) {
 
 /* Mount routes */
 router.use('/chatting', _chatting2.default);
-//router.use( '/webhook' );
+router.use('/webhook');
 
 exports.default = router;

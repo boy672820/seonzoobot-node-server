@@ -9,6 +9,6 @@ router.route( '/' )
 	.get( webhookController.index );
 
 router.route( '/' )
-	.post( webhookController.post );
+	.post( webhookController.indexpost );
 
 export default router;

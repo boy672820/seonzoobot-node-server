@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 import Net from 'net';
 import Youtube from 'youtube-api';
 import Bot from 'messenger-bot';
@@ -23,7 +24,7 @@ export default class WebhookController {
 	/**
 	 * Facebook messenger request
 	 */
-	post() {
+	indexpost( req, res ) {
 		// Youtube-api authenticates
 		Youtube.authenticate( {
 			type: 'key',
