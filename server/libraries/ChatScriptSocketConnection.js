@@ -16,8 +16,7 @@ export default class ChatScriptSocketConnection {
 
 	data( callback ) {
 		_socket.on( 'data', data => {
-			callback( data );
-			Results.setData( data );
+			Results.setData( callback( data ) );
 		} );
 	}
 
@@ -34,7 +33,7 @@ export default class ChatScriptSocketConnection {
 				let error = Results.getError();
 				if ( error ) throw error;
 
-				callback();
+				callback( Results );
 			}
 			catch ( e ) {
 				console.log( 'error', e );
