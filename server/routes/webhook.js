@@ -1,10 +1,10 @@
 /* jshint esversion: 6 */
 import { Router } from 'express';
-import WebhookController from '../controllers/WebhookController';
+import WebhookController from '../controllers/webhook';
 
+const webhookController = new WebhookController();
 
 const router = Router();
-const webhookController = new WebhookController();
 
 router.route( '/' )
 	.get( webhookController.index );

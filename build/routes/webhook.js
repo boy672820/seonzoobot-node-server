@@ -6,15 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _express = require('express');
 
-var _WebhookController = require('../controllers/WebhookController');
+var _webhook = require('../controllers/webhook');
 
-var _WebhookController2 = _interopRequireDefault(_WebhookController);
+var _webhook2 = _interopRequireDefault(_webhook);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* jshint esversion: 6 */
 var router = (0, _express.Router)();
-var webhookController = new _WebhookController2.default();
+var webhookController = new _webhook2.default();
 
 router.route('/').get(webhookController.index);
 

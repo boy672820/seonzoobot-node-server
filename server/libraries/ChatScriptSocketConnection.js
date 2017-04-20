@@ -16,24 +16,24 @@ export default class ChatScriptSocketConnection {
 
 	data( callback ) {
 		_socket.on( 'data', data => {
-			Results.setData( callback( data ) );
+			Result.setData( callback( data ) );
 		} );
 	}
 
 	error( callback ) {
 		_socket.on( 'error', error => {
 			callback( error );
-			Results.setError( error );
+			Result.setError( error );
 		} );
 	}
 
 	end( callback ) {
 		_socket.on( 'end', () => {
 			try {
-				let error = Results.getError();
+				let error = Result.getError();
 				if ( error ) throw error;
 
-				callback( Results );
+				callback( Result );
 			}
 			catch ( e ) {
 				console.log( 'error', e );
@@ -46,7 +46,7 @@ export default class ChatScriptSocketConnection {
 // Private variables
 let _data, _error;
 
-const Results = class {
+const Result = class {
 	setData( data ) {
 		_data = data;
 	}

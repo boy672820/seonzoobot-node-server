@@ -25,7 +25,6 @@
 							console.log( 'error', '서버에 에러가 발생했습니다.' );
 						else
 							console.log( 'error', 'Not connection' );
-
 						return;
 					}
 
@@ -33,7 +32,7 @@
 						$message.append( '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + res.data.id + '" frameborder="0" allowfullscreen></iframe>' );
 						$message.append( '<a href="https://www.youtube.com/watch?v=' + res.data.id + '" target="_blank">' + res.data.snippet.title + '</a>' );
 					} else {
-						$message.html( res.data );
+						$message.html( res );
 					}
 
 					$( '.chatting-result' ).html( $message );

@@ -1,10 +1,10 @@
 /* jshint esversion: 6 */
 import { Router } from 'express';
-import ChattingController from '../controllers/ChattingController';
+import ChattingController from '../controllers/chatting';
 
+const chattingController = new ChattingController();
 
 const router = Router();
-const chattingController = new ChattingController();
 
 router.route( '/' )
 	.get( chattingController.index );

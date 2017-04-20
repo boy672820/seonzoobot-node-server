@@ -6,15 +6,16 @@ Object.defineProperty(exports, "__esModule", {
 
 var _express = require('express');
 
-var _ChattingController = require('../controllers/ChattingController');
+var _chatting = require('../controllers/chatting');
 
-var _ChattingController2 = _interopRequireDefault(_ChattingController);
+var _chatting2 = _interopRequireDefault(_chatting);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* jshint esversion: 6 */
+var chattingController = new _chatting2.default();
+
 var router = (0, _express.Router)();
-var chattingController = new _ChattingController2.default();
 
 router.route('/').get(chattingController.index);
 

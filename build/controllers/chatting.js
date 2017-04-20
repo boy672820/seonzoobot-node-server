@@ -11,6 +11,10 @@ var _net = require('net');
 
 var _net2 = _interopRequireDefault(_net);
 
+var _ChatScriptSocketConnection = require('../libraries/ChatScriptSocketConnection');
+
+var _ChatScriptSocketConnection2 = _interopRequireDefault(_ChatScriptSocketConnection);
+
 var _YoutubeApiConfiguration = require('../libraries/YoutubeApiConfiguration');
 
 var _YoutubeApiConfiguration2 = _interopRequireDefault(_YoutubeApiConfiguration);
@@ -45,65 +49,48 @@ var ChattingController = function () {
 	}, {
 		key: 'sendMessage',
 		value: function sendMessage(req, res) {
-			// Create socket connection & Write(Send message)
-			var results = { success: false, error: false, type: 'message', data: '' },
-			    csConfig = { host: process.env.BOT_DNS, port: process.env.BOT_PORT, allowHalfOpen: true },
-			    guest = 'guest',
-			    csbot = 'nancy';
+			var csSocket = new _ChatScriptSocketConnection2.default(req.body.message);
 
-			var csSocket = _net2.default.createConnection(csConfig, function () {
-				var payload = guest + '\0' + csbot + '\0' + req.body.message + '\0';
-				csSocket.write(payload);
+			csSocket.data(function (data) {
+				return data.toString();
 			});
 
-			// Response from TCP server
-			csSocket.on('data', function (data) {
-				var message = data.toString();
-
-				results.success = true;
-				results.data = message;
+			csSocket.error(function (error) {
+				res.send('죄송합니다. 서버에 오류가 발생했습니다. 관리자에게 문의해 주세요.');
 			});
 
-			// Socket error
-			csSocket.on('error', function (error) {
-				console.log(error + ' ' + csSocket.address()[1]);
+			csSocket.end(function (result) {
+				var data = result.getData(),
+				    sendJson = {};
 
-				results.success = false;
-				results.error = true;
-			});
-
-			// Socket end
-			csSocket.on('end', function () {
-				switch (results.data.split(' ')[0]) {
-					// Youtube trending
+				switch (data.split(' ')[0]) {
 					case 'YOUTUBE-TRENDING':
-						var told_num = Number(results.data.split('.')[1]);
+						var count = Number(data.split('.')[1]);
 
 						var youtube = new _YoutubeApiConfiguration2.default();
-
 						youtube.videos.list({
 							part: 'snippet',
 							chart: 'mostPopular',
 							regionCode: 'KR',
-							maxResults: told_num
+							maxResults: count
 						}, function (error, data) {
-							if (error) {
-								console.log('error', error);
-								results.success = false;
-								results.error = true;
-							} else {
-								var item = data.items[told_num - 1];
-								results.data = item;
-								results.type = 'youtube-api';
+							try {
+								if (error) throw error;
+								sendJson = {
+									data: data.items[count - 1],
+									type: 'youtube-api'
+								};
+							} catch (e) {
+								sendJson = '유튜브 동영상을 가져오는 중 문제가 생겼습니다. 다시 시도해도 같은 문제가 발생할 경우 관리자에게 문의해 주세요.';
 							}
-
-							res.send(results);
 						});
 						break;
 
 					default:
-						res.send(results);
+						sendJson = data;
 				}
+
+				res.send(sendJson);
 			});
 		}
 	}]);

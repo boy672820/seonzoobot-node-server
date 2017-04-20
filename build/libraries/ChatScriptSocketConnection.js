@@ -36,8 +36,7 @@ var ChatScriptSocketConnection = function () {
 		key: 'data',
 		value: function data(callback) {
 			_socket.on('data', function (data) {
-				callback(data);
-				Results.setData(data);
+				Result.setData(callback(data));
 			});
 		}
 	}, {
@@ -45,7 +44,7 @@ var ChatScriptSocketConnection = function () {
 		value: function error(callback) {
 			_socket.on('error', function (error) {
 				callback(error);
-				Results.setError(error);
+				Result.setError(error);
 			});
 		}
 	}, {
@@ -53,10 +52,10 @@ var ChatScriptSocketConnection = function () {
 		value: function end(callback) {
 			_socket.on('end', function () {
 				try {
-					var error = Results.getError();
+					var error = Result.getError();
 					if (error) throw error;
 
-					callback();
+					callback(Result);
 				} catch (e) {
 					console.log('error', e);
 				}
@@ -74,12 +73,12 @@ exports.default = ChatScriptSocketConnection;
 var _data = void 0,
     _error = void 0;
 
-var Results = function () {
-	function Results() {
-		_classCallCheck(this, Results);
+var Result = function () {
+	function Result() {
+		_classCallCheck(this, Result);
 	}
 
-	_createClass(Results, [{
+	_createClass(Result, [{
 		key: 'setData',
 		value: function setData(data) {
 			_data = data;
@@ -101,5 +100,5 @@ var Results = function () {
 		}
 	}]);
 
-	return Results;
+	return Result;
 }();
